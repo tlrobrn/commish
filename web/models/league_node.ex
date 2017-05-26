@@ -13,14 +13,18 @@ defmodule Commish.LeagueNode do
   Builds a changeset based on the `struct` and `params`.
   """
   def changeset(struct, params \\ %{}) do
-    root_id = params
-    |> Map.get(:ancestors, [])
-    |> List.last
+    updated_params = generate_ancestry(params)
 
     struct
-    |> cast(params, [:name, :ancestors])
-    |> change(root_id: root_id)
+    |> cast(updated_params, [:name, :ancestors, :root_id])
     |> validate_required([:name])
     |> foreign_key_constraint(:root_id)
   end
+
+  defp generate_ancestry(params = %{parent: parent = %Commish.LeagueNode{}}) do
+    params
+    |> Map.put_new(:ancestors, [parent.id | parent.ancestors])
+    |> Map.put_new(:root_id, parent.root_id || parent.id)
+  end
+  defp generate_ancestry(params), do: params
 end
