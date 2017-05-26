@@ -1,0 +1,28 @@
+<h2>Listing schedule settings</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Games to play</th>
+      <th>League node</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for schedule_setting <- @schedule_settings do %>
+    <tr>
+      <td><%= schedule_setting.games_to_play %></td>
+      <td><%= schedule_setting.league_node_id %></td>
+
+      <td class="text-right">
+        <%= link "Show", to: schedule_setting_path(@conn, :show, schedule_setting), class: "btn btn-default btn-xs" %>
+        <%= link "Edit", to: schedule_setting_path(@conn, :edit, schedule_setting), class: "btn btn-default btn-xs" %>
+        <%= link "Delete", to: schedule_setting_path(@conn, :delete, schedule_setting), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<%= link "New schedule setting", to: schedule_setting_path(@conn, :new) %>

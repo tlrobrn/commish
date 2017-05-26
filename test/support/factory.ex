@@ -18,4 +18,11 @@ defmodule Commish.Factory do
       league_node: build(:league_node),
     }
   end
+
+  def schedule_setting_factory do
+    %Commish.ScheduleSetting{
+      games_to_play: [2],
+      league_node: build(:league_node),
+    }
+  end
 end

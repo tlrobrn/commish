@@ -1,0 +1,18 @@
+<h2>Show schedule setting</h2>
+
+<ul>
+
+  <li>
+    <strong>Games to play:</strong>
+    <%= @schedule_setting.games_to_play %>
+  </li>
+
+  <li>
+    <strong>League node:</strong>
+    <%= @schedule_setting.league_node_id %>
+  </li>
+
+</ul>
+
+<%= link "Edit", to: schedule_setting_path(@conn, :edit, @schedule_setting) %>
+<%= link "Back", to: schedule_setting_path(@conn, :index) %>

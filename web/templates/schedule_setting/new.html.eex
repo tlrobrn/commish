@@ -1,0 +1,6 @@
+<h2>New schedule setting</h2>
+
+<%= render "form.html", changeset: @changeset,
+                        action: schedule_setting_path(@conn, :create) %>
+
+<%= link "Back", to: schedule_setting_path(@conn, :index) %>
