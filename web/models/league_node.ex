@@ -1,5 +1,6 @@
 defmodule Commish.LeagueNode do
   use Commish.Web, :model
+  alias Commish.Repo
 
   schema "league_nodes" do
     field :name, :string
@@ -22,12 +23,39 @@ defmodule Commish.LeagueNode do
     |> foreign_key_constraint(:root_id)
   end
 
-  defp generate_ancestry(params = %{parent: parent = %Commish.LeagueNode{}}) do
+  def children(node) do
+    node |> children_query |> Repo.all
+  end
+  defp children_query(node) do
+    child_ancestors = [node.id | node.ancestors]
+    __MODULE__ |> where(ancestors: ^child_ancestors)
+  end
+
+  def descendants(node) do
+    node |> descendants_query |> Repo.all
+  end
+  defp descendants_query(node) do
+    __MODULE__ |> where([n], fragment("? = ANY(?)", ^node.id, n.ancestors))
+  end
+
+  def teams_with_ancestry(node) do
+    node
+    |> teams_with_ancestry_query
+    |> Repo.all
+  end
+  defp teams_with_ancestry_query(node) do
+    node
+    |> descendants_query
+    |> join(:inner, [n], t in assoc(n, :teams))
+    |> select([n, t], {t, n.ancestors})
+  end
+
+  defp generate_ancestry(params = %{parent: parent = %__MODULE__{}}) do
     params
     |> Map.put_new(:ancestors, [parent.id | parent.ancestors])
     |> Map.put_new(:root_id, parent.root_id || parent.id)
   end
-  defp generate_ancestry(params = %{"parent" => parent = %Commish.LeagueNode{}}) do
+  defp generate_ancestry(params = %{"parent" => parent = %__MODULE__{}}) do
     params
     |> Map.put_new("ancestors", [parent.id | parent.ancestors])
     |> Map.put_new("root_id", parent.root_id || parent.id)

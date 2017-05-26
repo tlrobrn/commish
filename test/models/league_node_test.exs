@@ -86,4 +86,61 @@ defmodule Commish.LeagueNodeTest do
     Repo.delete(root)
     assert Repo.all(LeagueNode) |> Enum.count == 0
   end
+
+  test "children returns [] for a leaf node" do
+    node = insert(:league_node)
+    assert LeagueNode.children(node) == []
+  end
+
+  test "children returns a node's direct children" do
+    parent = insert(:league_node)
+    children = [1, 2, 3] |> Enum.map(fn _ ->
+      build(:league_node) |> with_ancestors([parent.id]) |> insert
+    end)
+    _grandchild = build(:league_node) |> with_ancestors([hd(children).id, parent.id]) |> insert
+
+    assert LeagueNode.children(parent) == children
+  end
+
+  test "descendants returns [] for a leaf node" do
+    node = insert(:league_node)
+    assert LeagueNode.descendants(node) == []
+  end
+
+  test "descendants returns a node's direct descendants" do
+    parent = insert(:league_node)
+    children = [1, 2, 3] |> Enum.map(fn _ ->
+      build(:league_node) |> with_ancestors([parent.id]) |> insert
+    end)
+    grandchild = build(:league_node) |> with_ancestors([hd(children).id, parent.id]) |> insert
+
+    assert LeagueNode.descendants(parent) == children ++ [grandchild]
+  end
+
+  test "teams_with_ancestry returns [] if a node has no descendants with teams" do
+    parent = insert(:league_node)
+    _children = [1, 2, 3] |> Enum.map(fn _ ->
+      build(:league_node) |> with_ancestors([parent.id]) |> insert
+    end)
+
+    assert LeagueNode.teams_with_ancestry(parent) == []
+  end
+
+  test "teams_with_ancestry returns its descendants teams" do
+    root = insert(:league_node)
+    parent = build(:league_node) |> with_ancestors([root.id]) |> insert
+    team_ids = [1, 2, 3]
+    |> Stream.map(fn _ ->
+      node = build(:league_node) |> with_ancestors([parent.id, root.id]) |> insert
+      insert(:team, league_node: node).id
+    end)
+    |> Enum.sort
+
+    resulting_team_ids = root
+    |> LeagueNode.teams_with_ancestry
+    |> Stream.map(fn {team, _ancestors} -> team.id end)
+    |> Enum.sort
+
+    assert resulting_team_ids == team_ids
+  end
 end
