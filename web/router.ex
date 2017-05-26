@@ -18,6 +18,7 @@ defmodule Commish.Router do
 
     get "/", PageController, :index
     resources "/league_nodes", LeagueNodeController
+    resources "/teams", TeamController
   end
 
   # Other scopes may use custom stacks.
