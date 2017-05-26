@@ -26,6 +26,17 @@ defmodule Commish.LeagueNodeTest do
     assert child.root_id == root.id
   end
 
+  test "changeset builds ancestry from its parent with string params" do
+    root = insert(:league_node)
+    parent = build(:league_node) |> with_ancestors([root.id]) |> insert
+    child = %LeagueNode{}
+    |> LeagueNode.changeset(%{"name" => "child", "parent" => parent})
+    |> Repo.insert!
+
+    assert child.ancestors == [parent.id, root.id]
+    assert child.root_id == root.id
+  end
+
   test "changeset sets the root_id properly for the first child" do
     root = insert(:league_node)
     child = %LeagueNode{}

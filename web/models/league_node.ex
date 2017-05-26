@@ -27,5 +27,10 @@ defmodule Commish.LeagueNode do
     |> Map.put_new(:ancestors, [parent.id | parent.ancestors])
     |> Map.put_new(:root_id, parent.root_id || parent.id)
   end
+  defp generate_ancestry(params = %{"parent" => parent = %Commish.LeagueNode{}}) do
+    params
+    |> Map.put_new("ancestors", [parent.id | parent.ancestors])
+    |> Map.put_new("root_id", parent.root_id || parent.id)
+  end
   defp generate_ancestry(params), do: params
 end
