@@ -1,0 +1,18 @@
+<h2>Show league node</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @league_node.name %>
+  </li>
+
+  <li>
+    <strong>Root:</strong>
+    <%= @league_node.root_id %>
+  </li>
+
+</ul>
+
+<%= link "Edit", to: league_node_path(@conn, :edit, @league_node) %>
+<%= link "Back", to: league_node_path(@conn, :index) %>

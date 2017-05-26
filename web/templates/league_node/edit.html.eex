@@ -1,0 +1,6 @@
+<h2>Edit league node</h2>
+
+<%= render "form.html", changeset: @changeset,
+                        action: league_node_path(@conn, :update, @league_node) %>
+
+<%= link "Back", to: league_node_path(@conn, :index) %>

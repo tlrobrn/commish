@@ -17,6 +17,7 @@ defmodule Commish.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+    resources "/league_nodes", LeagueNodeController
   end
 
   # Other scopes may use custom stacks.

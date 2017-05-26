@@ -22,6 +22,8 @@ defmodule Commish.ModelCase do
       import Ecto.Changeset
       import Ecto.Query
       import Commish.ModelCase
+      import Commish.Factory
+      import Commish.Helpers
     end
   end
 

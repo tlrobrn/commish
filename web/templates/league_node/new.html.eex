@@ -1,0 +1,6 @@
+<h2>New league node</h2>
+
+<%= render "form.html", changeset: @changeset,
+                        action: league_node_path(@conn, :create) %>
+
+<%= link "Back", to: league_node_path(@conn, :index) %>

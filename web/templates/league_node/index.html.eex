@@ -1,0 +1,28 @@
+<h2>Listing league nodes</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Root</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for league_node <- @league_nodes do %>
+    <tr>
+      <td><%= league_node.name %></td>
+      <td><%= league_node.root_id %></td>
+
+      <td class="text-right">
+        <%= link "Show", to: league_node_path(@conn, :show, league_node), class: "btn btn-default btn-xs" %>
+        <%= link "Edit", to: league_node_path(@conn, :edit, league_node), class: "btn btn-default btn-xs" %>
+        <%= link "Delete", to: league_node_path(@conn, :delete, league_node), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<%= link "New league node", to: league_node_path(@conn, :new) %>
