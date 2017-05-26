@@ -16,7 +16,7 @@ defmodule Commish.Team do
 
     struct
     |> cast(params, [:name])
-    |> put_assoc(:league_node, league_node)
+    |> attach_node(league_node)
     |> validate_required([:name])
     |> foreign_key_constraint(:league_node_id)
   end

@@ -32,13 +32,13 @@ defmodule Commish.TeamController do
   end
 
   def edit(conn, %{"id" => id}) do
-    team = Repo.get!(Team, id) |> Repo.preload(:league_node)
+    team = Repo.get!(Team, id)
     changeset = Team.changeset(team)
     render(conn, "edit.html", team: team, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "team" => team_params}) do
-    team = Repo.get!(Team, id) |> Repo.preload(:league_node)
+    team = Repo.get!(Team, id)
     changeset = Team.changeset(team, team_params)
 
     case Repo.update(changeset) do

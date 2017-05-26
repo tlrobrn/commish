@@ -23,6 +23,7 @@ defmodule Commish.Web do
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
+      import Commish.ModelHelper
     end
   end
 
