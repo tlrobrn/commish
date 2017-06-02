@@ -1,0 +1,28 @@
+<h2>Listing tournament configurations</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>League node</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for tournament_configuration <- @tournament_configurations do %>
+    <tr>
+      <td><%= tournament_configuration.name %></td>
+      <td><%= tournament_configuration.league_node_id %></td>
+
+      <td class="text-right">
+        <%= link "Show", to: tournament_configuration_path(@conn, :show, tournament_configuration), class: "btn btn-default btn-xs" %>
+        <%= link "Edit", to: tournament_configuration_path(@conn, :edit, tournament_configuration), class: "btn btn-default btn-xs" %>
+        <%= link "Delete", to: tournament_configuration_path(@conn, :delete, tournament_configuration), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<%= link "New tournament configuration", to: tournament_configuration_path(@conn, :new) %>

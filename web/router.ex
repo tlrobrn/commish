@@ -20,6 +20,7 @@ defmodule Commish.Router do
     resources "/league_nodes", LeagueNodeController
     resources "/teams", TeamController
     resources "/schedule_settings", ScheduleSettingController
+    resources "/tournament_configurations", TournamentConfigurationController
   end
 
   # Other scopes may use custom stacks.

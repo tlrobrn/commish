@@ -1,9 +1,10 @@
-defmodule Commish.Team do
+defmodule Commish.TournamentConfiguration do
   use Commish.Web, :model
 
-  schema "teams" do
+  schema "tournament_configurations" do
     field :name, :string
     belongs_to :league_node, Commish.LeagueNode
+    has_many :schedule_settings, Commish.ScheduleSetting, on_delete: :delete_all
 
     timestamps()
   end
@@ -18,6 +19,5 @@ defmodule Commish.Team do
     |> cast(params, [:name])
     |> attach_assoc(:league_node, league_node)
     |> validate_required([:name])
-    |> foreign_key_constraint(:league_node_id)
   end
 end

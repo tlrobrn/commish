@@ -3,7 +3,7 @@ defmodule Commish.ScheduleSettingControllerTest do
 
   alias Commish.ScheduleSetting
   @valid_attrs %{games_to_play: []}
-  @invalid_attrs %{}
+  @invalid_attrs %{games_to_play: nil}
 
   test "lists all entries on index", %{conn: conn} do
     conn = get conn, schedule_setting_path(conn, :index)

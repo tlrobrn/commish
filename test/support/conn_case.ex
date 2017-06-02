@@ -26,6 +26,7 @@ defmodule Commish.ConnCase do
       import Ecto.Query
 
       import Commish.Router.Helpers
+      import Commish.Factory
 
       # The default endpoint for testing
       @endpoint Commish.Endpoint

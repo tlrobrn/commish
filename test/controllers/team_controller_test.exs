@@ -3,7 +3,7 @@ defmodule Commish.TeamControllerTest do
 
   alias Commish.Team
   @valid_attrs %{name: "some content"}
-  @invalid_attrs %{}
+  @invalid_attrs %{name: nil}
 
   test "lists all entries on index", %{conn: conn} do
     conn = get conn, team_path(conn, :index)
@@ -27,7 +27,7 @@ defmodule Commish.TeamControllerTest do
   end
 
   test "shows chosen resource", %{conn: conn} do
-    team = Repo.insert! %Team{}
+    team = insert(:team)
     conn = get conn, team_path(conn, :show, team)
     assert html_response(conn, 200) =~ "Show team"
   end
@@ -39,26 +39,26 @@ defmodule Commish.TeamControllerTest do
   end
 
   test "renders form for editing chosen resource", %{conn: conn} do
-    team = Repo.insert! %Team{}
+    team = insert(:team)
     conn = get conn, team_path(conn, :edit, team)
     assert html_response(conn, 200) =~ "Edit team"
   end
 
   test "updates chosen resource and redirects when data is valid", %{conn: conn} do
-    team = Repo.insert! %Team{}
+    team = insert(:team)
     conn = put conn, team_path(conn, :update, team), team: @valid_attrs
     assert redirected_to(conn) == team_path(conn, :show, team)
     assert Repo.get_by(Team, @valid_attrs)
   end
 
   test "does not update chosen resource and renders errors when data is invalid", %{conn: conn} do
-    team = Repo.insert! %Team{}
+    team = insert(:team)
     conn = put conn, team_path(conn, :update, team), team: @invalid_attrs
     assert html_response(conn, 200) =~ "Edit team"
   end
 
   test "deletes chosen resource", %{conn: conn} do
-    team = Repo.insert! %Team{}
+    team = insert(:team)
     conn = delete conn, team_path(conn, :delete, team)
     assert redirected_to(conn) == team_path(conn, :index)
     refute Repo.get(Team, team.id)

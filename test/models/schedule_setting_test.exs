@@ -43,11 +43,20 @@ defmodule Commish.ScheduleSettingTest do
     refute changeset.valid?
   end
 
-  test "schedule is deleted if it's node is deleted" do
+  test "schedule is deleted if its node is deleted" do
     node = insert(:league_node)
     insert(:schedule_setting, league_node: node)
 
     Repo.delete!(node)
+
+    assert Repo.all(ScheduleSetting) |> Enum.count == 0
+  end
+
+  test "schedule is deleted if its tournament_configuration is deleted" do
+    tournament_configuration = insert(:tournament_configuration)
+    insert(:schedule_setting, tournament_configuration: tournament_configuration)
+
+    Repo.delete!(tournament_configuration)
 
     assert Repo.all(ScheduleSetting) |> Enum.count == 0
   end

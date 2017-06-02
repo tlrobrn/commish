@@ -19,10 +19,18 @@ defmodule Commish.Factory do
     }
   end
 
+  def tournament_configuration_factory do
+    %Commish.TournamentConfiguration{
+      name: sequence("TournamentConfiguration"),
+      league_node: build(:league_node),
+    }
+  end
+
   def schedule_setting_factory do
     %Commish.ScheduleSetting{
       games_to_play: [2],
       league_node: build(:league_node),
+      tournament_configuration: build(:tournament_configuration),
     }
   end
 end

@@ -7,6 +7,7 @@ defmodule Commish.LeagueNode do
     field :ancestors, {:array, :integer}
     belongs_to :root, Commish.LeagueNode
     has_many :teams, Commish.Team, on_delete: :nilify_all
+    has_many :tournament_configurations, Commish.TournamentConfiguration, on_delete: :delete_all
 
     timestamps()
   end
