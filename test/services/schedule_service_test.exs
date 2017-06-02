@@ -16,6 +16,19 @@ defmodule Commish.ScheduleServiceTest do
     assert ScheduleService.teams_to_schedule(root) == %{}
   end
 
+  test "teams_to_schedule returns all of a node's direct teams" do
+    root = insert(:league_node)
+    first_team = insert(:team, league_node: root)
+    second_team = insert(:team, league_node: root)
+    third_team = insert(:team, league_node: root)
+
+    mapping = ScheduleService.teams_to_schedule(root)
+
+    assert mapping[first_team.id] |> Enum.sort == [second_team.id, third_team.id]
+    assert mapping[second_team.id] |> Enum.sort == [first_team.id, third_team.id]
+    assert mapping[third_team.id] |> Enum.sort == [first_team.id, second_team.id]
+  end
+
   test "teams_to_schedule returns a map of teams to their desired opponents" do
     root = insert(:league_node)
     parent = build(:league_node) |> with_ancestors([root.id]) |> insert
