@@ -129,18 +129,18 @@ defmodule Commish.LeagueNodeTest do
   test "teams_with_ancestry returns its descendants teams" do
     root = insert(:league_node)
     parent = build(:league_node) |> with_ancestors([root.id]) |> insert
-    team_ids = [1, 2, 3]
+    team_ids_with_ancestors = [1, 2, 3]
     |> Stream.map(fn _ ->
       node = build(:league_node) |> with_ancestors([parent.id, root.id]) |> insert
-      insert(:team, league_node: node).id
+      {insert(:team, league_node: node).id, [node.id, parent.id, root.id]}
     end)
-    |> Enum.sort
+    |> Enum.sort_by(fn {id, _} -> id end)
 
-    resulting_team_ids = root
+    resulting_team_ids_with_ancestors = root
     |> LeagueNode.teams_with_ancestry
-    |> Stream.map(fn {team, _ancestors} -> team.id end)
-    |> Enum.sort
+    |> Stream.map(fn {team, ancestors} -> {team.id, ancestors} end)
+    |> Enum.sort_by(fn {id, _} -> id end)
 
-    assert resulting_team_ids == team_ids
+    assert resulting_team_ids_with_ancestors == team_ids_with_ancestors
   end
 end

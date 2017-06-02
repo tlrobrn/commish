@@ -47,7 +47,7 @@ defmodule Commish.LeagueNode do
     node
     |> descendants_query
     |> join(:inner, [n], t in assoc(n, :teams))
-    |> select([n, t], {t, n.ancestors})
+    |> select([n, t], {t, fragment("?||?", n.id, n.ancestors)})
   end
 
   defp generate_ancestry(params = %{parent: parent = %__MODULE__{}}) do
