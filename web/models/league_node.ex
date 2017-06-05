@@ -47,6 +47,7 @@ defmodule Commish.LeagueNode do
   defp teams_with_ancestry_query(node) do
     node
     |> descendants_query
+    |> or_where([n], n.id == ^node.id)
     |> join(:inner, [n], t in assoc(n, :teams))
     |> select([n, t], {t, fragment("?||?", n.id, n.ancestors)})
   end
