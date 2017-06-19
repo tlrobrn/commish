@@ -49,4 +49,28 @@ defmodule Commish.ScheduleServiceTest do
       assert mapping[team.id] |> Enum.sort == first_teams |> Stream.map(&(&1.id)) |> Enum.sort
     end)
   end
+
+  test "schedule_tournament schedules all games in a tournament" do
+    root = insert(:league_node)
+    tournament_configuration = insert(:tournament_configuration, league_node: root)
+
+    parent = build(:league_node) |> with_ancestors([root.id]) |> insert
+    [first_child, second_child] = for _ <- 1..2 do
+      node = build(:league_node) |> with_ancestors([parent.id, root.id]) |> insert
+
+      insert(
+        :schedule_setting,
+        league_node: node,
+        tournament_configuration: tournament_configuration,
+        games_to_play: [4],
+      )
+
+      node
+    end
+    _first_teams = for _ <- 1..2, do: insert(:team, league_node: first_child)
+    _second_teams = for _ <- 1..2, do: insert(:team, league_node: second_child)
+
+    games = ScheduleService.schedule_tournament(tournament_configuration)
+    assert length(games) == 8
+  end
 end
